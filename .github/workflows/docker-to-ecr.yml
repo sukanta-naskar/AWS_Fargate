@@ -28,6 +28,11 @@ jobs:
           aws ecr describe-repositories --repository-names patient-service || \
           aws ecr create-repository --repository-name patient-service
 
+        run: |
+          aws ecr describe-repositories --repository-names appointment-service || \
+          aws ecr create-repository --repository-name appointment-service          
+          
+
       - name: Build Docker Image (Patient)
         working-directory: app
         run: |
@@ -39,3 +44,15 @@ jobs:
           IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/patient-service:latest
           docker tag patient-service:latest $IMAGE_URI
           docker push $IMAGE_URI
+          
+      - name: Build Docker Image (Appointment)
+        working-directory: app
+        run: |
+          echo "Building appointment image..."
+          docker build -t appointment-service -f Dockerfile.appointment .
+
+      - name: Tag and Push Docker Image (Appointment)
+        run: |
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/appointment-service:latest
+          docker tag appointment-service:latest $IMAGE_URI
+          docker push $IMAGE_URI          
