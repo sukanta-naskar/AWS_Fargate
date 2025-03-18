@@ -27,8 +27,7 @@ jobs:
         run: |
           aws ecr describe-repositories --repository-names patient-service || \
           aws ecr create-repository --repository-name patient-service
-
-        run: |
+      
           aws ecr describe-repositories --repository-names appointment-service || \
           aws ecr create-repository --repository-name appointment-service          
           
